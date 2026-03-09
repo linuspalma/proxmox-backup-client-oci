@@ -20,12 +20,22 @@ case "$MODE" in
 #----------------------------------------------------
   backup)
 #### backup: wichitg ist auch, dass die compose.yml mit pinned image versions mit ins backup kommt 
+
+## include mount points
+INCLUDE_DEVS=""
+for dir in /backup/*/; do
+  INCLUDE_DEVS="$INCLUDE_DEVS --include-dev $dir"
+done
+
 # 1. backup funktion ausfueren
   proxmox-backup-client backup \
     "${BACKUP_ID}.pxar:/backup" \
     --ns "$BACKUP_NS" \
     --backup-id "$BACKUP_ID" \
-    --keyfile /key/enc.key
+    --keyfile /key/enc.key \
+    $INCLUDE_DEVS
+
+
 # 2. snapshot namen ermitteln --> get last snapshot
 # 3. get all mount names -> /backup/*
 # 4. note update mit volume names

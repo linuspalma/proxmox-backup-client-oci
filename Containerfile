@@ -13,6 +13,7 @@ RUN apt-get update \
 FROM docker.io/library/alpine:3
 RUN apk add --no-cache jq
 COPY --from=builder /usr/bin/proxmox-backup-client /usr/local/bin
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 
 # ENTRYPOINT ["/bin/sh"]
 # ENTRYPOINT ["sleep", "infinity"]

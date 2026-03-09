@@ -1,0 +1,43 @@
+name: PBC - Build images & push to gh-oci-registry
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build-pbc:
+    name: Build & push pbc Image
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    env:
+      IMAGE_NAME: pbc
+      REGISTRY: ghcr.io/linuspalma
+    steps:
+      - name: Clone the repository
+        uses: actions/checkout@v4
+
+      - name: Buildah Action
+        id: build-image
+        uses: redhat-actions/buildah-build@v2
+        with:
+          image: ${{ env.IMAGE_NAME }}
+          tags: latest ${{ github.sha }}
+          context: .
+          containerfiles: |
+            ./Containerfile
+
+      - name: login at GH
+        uses: redhat-actions/podman-login@v1
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: push to GH OCI Registry
+        id: push-to-ghcr
+        uses: redhat-actions/push-to-registry@v2
+        with:
+          image: ${{ steps.build-image.outputs.image }}
+          tags: ${{ steps.build-image.outputs.tags }}
+          registry: ${{ env.REGISTRY }}

@@ -6,7 +6,7 @@ There's no official image from Proxmox, so this is a good excuse to learn how to
 
 ## Versioning
 
-Image tags follow the bundled `proxmox-backup-client` version. For example, image tag `3.3.2` ships with `proxmox-backup-client` version `3.3.2`. Use `latest` to always get the most recent build.
+Image tags follow the bundled `proxmox-backup-client` version. For example, image tag `4.1.1` ships with `proxmox-backup-client` version `4.1.1`. Use `latest` to always get the most recent build.
 
 ## How it works
 
@@ -41,6 +41,12 @@ docker run --rm \
 -v /path/to/enc.key:/key/enc.key:ro \
 -v my-data-volume:/backup/data:ro \
 ghcr.io/OWNER/proxmox-backup-client:3.3.2
+```
+
+important: with SELinux run this command:
+
+```bash
+chcon -t container_file_t secret/pbs.enc
 ```
 
 ### Environment variables

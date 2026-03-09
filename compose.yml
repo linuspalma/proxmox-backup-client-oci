@@ -1,0 +1,31 @@
+services:
+  backup:
+    image: localhost/pbc
+    container_name: backup
+    command: ["sleep", "infinity"]
+    env_file:
+      - .env
+    volumes:
+      - test-data:/backup:ro
+      - ./secret/key.enc:/key/enc.key:ro,Z
+      - ./entrypoint.sh:/usr/local/bin/entrypoint.sh:ro,Z
+  data-check:
+    image: docker.io/library/alpine
+    command: ["sleep", "infinity"]
+    container_name: data2
+    volumes:
+      - test-data:/mnt/data
+  restore:
+    image: localhost/pbc
+    container_name: restore
+    command: ["sleep", "infinity"]
+    env_file:
+      - .env
+    volumes:
+      - test-data:/backup
+      - ./secret/key.enc:/key/enc.key:ro,Z
+      - ./entrypoint.sh:/usr/local/bin/entrypoint.sh:ro,Z
+
+volumes:
+  test-data:
+    external: true

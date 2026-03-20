@@ -59,7 +59,8 @@ done
     "host/${BACKUP_ID}/${SNAPSHOT}" \
     "${BACKUP_ID}.pxar" /backup/ \
     --ns "$BACKUP_NS" \
-    --keyfile /key/enc.key
+    --keyfile /key/enc.key \
+    --allow-existing-dirs true
 ;;
 #----------------------------------------------------
   *)

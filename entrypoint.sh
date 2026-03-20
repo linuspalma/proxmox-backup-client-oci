@@ -57,7 +57,7 @@ done
     # befehl ausfueren 
   proxmox-backup-client restore \
     "host/${BACKUP_ID}/${SNAPSHOT}" \
-    "${BACKUP_ID}.pxar" /backup/ \
+    "${BACKUP_ID}.pxar" - \
     --ns "$BACKUP_NS" \
     --keyfile /key/enc.key \
     | pxar extract --no-xattrs --no-fcaps --no-acls -t /backup/
